@@ -167,4 +167,13 @@ function saveAs(blob, name) {
   saveAsLink.click();
 }
 
+function exportNotesAsCSV() {
+  // export notes as a CSV file
+  let csv = notes.map(function(note) {
+    return note.title + "~" + note.text + "~" + note.tags.join(",");
+  }).join("\n");
+  let blob = new Blob([csv], { type: "text/csv" });
+  saveAs(blob, "notes.csv");
+}
+
 drawNotes();
