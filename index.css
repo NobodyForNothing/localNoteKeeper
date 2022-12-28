@@ -1,0 +1,64 @@
+.main {
+  margin: 3%;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color: black;
+  color: white;
+}
+
+#notes-section {
+  background-color: #111;
+  padding: 30px;
+  border-radius: 20px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: 10px;
+}
+
+#notes-section .note {
+  flex: 1 0 30%; /* limit notes per row*/
+  background-color: #222;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  max-width: 15%;
+  height: 30%;
+  padding: 15px;
+  border-radius: 30px;
+  margin: 20px;
+}
+#notes-section .note > div {
+  display: block;
+}
+
+#add-notes {
+  font-size: 900%;
+  font-style: bold;
+  text-align: center;
+  color: gray;
+}
+
+#add-notes:hover {
+  transform: scale(1.03);
+}
+
+.add-notes-menu {
+  color: black;
+  background-color: lightgray;
+  padding: 10px;
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 40%;
+  max-width: 28vh;
+  border-radius: 10px;
+  float: left;
+}
+
+.add-notes-menu > button {
+  position: absolute;
+  margin-left: 5px;
+  padding-top: 21px;
+  padding-bottom: 21px;
+  top: 12px;
+}
+
+/* todo style texts */
