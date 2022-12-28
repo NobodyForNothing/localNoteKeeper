@@ -30,6 +30,17 @@
 #notes-section .note > div {
   display: block;
 }
+#notes-section .note .remove-note {
+  float: right;
+  border: none;
+  font-size: large;
+  font-weight:bolder;
+  border-radius: 100%;
+  background-color: #FFF;
+}
+#notes-section .note .remove-note:hover {
+  background-color: #999;
+}
 
 #add-notes {
   font-size: 900%;

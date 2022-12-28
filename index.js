@@ -45,15 +45,18 @@ function drawNotes() {
         tagsElement.appendChild(tagElement);
       }
     }
-    /*
-    // add remove button
-    let removeButton = document.createElement("button");
-    removeButton.classList.add('removeBtn');
-    */
-    // add note to add new notes
+    // add removenote button to note
+    let removeNoteButton = document.createElement("button");
+    removeNoteButton.classList.add('remove-note');
+    removeNoteButton.innerText = "X";
+    removeNoteButton.onclick = function() {
+      removeNote(note.id);
+    }
+
     innerNote.appendChild(titleElement);
     innerNote.appendChild(textElement);
     innerNote.appendChild(tagsElement);
+    innerNote.appendChild(removeNoteButton);
     noteElement.appendChild(innerNote)
 
     sectionElement.appendChild(noteElement);
