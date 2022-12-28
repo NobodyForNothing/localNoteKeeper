@@ -44,23 +44,26 @@
 
 .add-notes-menu {
   color: black;
-  background-color: lightgray;
-  padding: 10px;
   position: absolute;
   display: block;
+  display: grid;
   top: 50%;
   left: 40%;
-  max-width: 28vh;
+  max-width: 30%;
   border-radius: 10px;
   float: left;
 }
 
 .add-notes-menu > button {
   position: absolute;
-  margin-left: 5px;
-  padding-top: 21px;
-  padding-bottom: 21px;
-  top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  top: 0;
+  right: -30%;
+  width: 30%;
+  height: 100%;
 }
 
 /* todo style texts */
