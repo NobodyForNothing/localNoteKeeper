@@ -8,14 +8,21 @@ let notes = [{
 }]
 
 function createNote(text, tags, title = "Note") {
-  let lastNoteId = notes[notes.length - 1]["id"]
+  let lastNoteId = 0;
+  for(let note of notes) {
+    if(note.id > lastNoteId) {
+      lastNoteId = note.id;
+    }
+  }
+  let noteId = lastNoteId + 1;
   return {
-    "id": lastNoteId + 1,
-    "title": title,
-    "text": text,
-    "tags": tags
+    id: noteId,
+    title: title,
+    text: text,
+    tags: tags
   };
 }
+
 
 function drawNotes() {
   let sectionElement = document.getElementById("notes-section");
