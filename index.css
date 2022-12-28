@@ -12,7 +12,9 @@
   border-radius: 20px;
   display: inline-flex;
   flex-wrap: wrap;
-  margin: 10px;
+  margin: 5%;
+  margin-top: 5vh;
+  width: 90%;
 }
 
 #notes-section .note {

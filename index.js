@@ -156,3 +156,5 @@ function saveAs(blob, name) {
   saveAsLink.download = name;
   saveAsLink.click();
 }
+
+drawNotes();
