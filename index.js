@@ -9,6 +9,9 @@ const defaultNotes = [{
 
 let notes = defaultNotes;
 
+const fakeEvent = {};
+fakeEvent.preventDefault = () => {};
+
 function loadNotes() {
   let json = window.localStorage.notes;
   let notesInStorage = JSON.parse(json);
@@ -73,15 +76,19 @@ function drawNotes() {
     // add removenote button to note
     let removeNoteButton = document.createElement("button");
     removeNoteButton.classList.add('remove-note');
-    removeNoteButton.innerText = "X";
-    removeNoteButton.onclick = function() {
-      removeNote(note.id);
-    }
+    removeNoteButton.innerText = "✖";
+    removeNoteButton.onclick = () => removeNote(note.id);
+  
+    let editNoteButton = document.createElement("button");
+    editNoteButton.classList.add('edit-note');
+    editNoteButton.innerText = "✏";
+    editNoteButton.onclick = () => showEditNoteMenu(note.id);
 
     innerNote.appendChild(titleElement);
     innerNote.appendChild(textElement);
     innerNote.appendChild(tagsElement);
     innerNote.appendChild(removeNoteButton);
+    innerNote.appendChild(editNoteButton);
     noteElement.appendChild(innerNote);
 
     sectionElement.appendChild(noteElement);
@@ -100,6 +107,14 @@ function drawNotes() {
 function addNote(text, tags, title = "Note") {
   notes.push(createNote(text, tags, title));
   drawNotes();
+}
+
+function getNote(id) {
+  for (let i = 0; i < notes.length; i++) {
+    if (notes[i]["id"] === id) {
+      return notes[i];
+    }
+  }
 }
 
 function removeNote(id) {
@@ -123,9 +138,7 @@ function updateNote(id, title, text, tags) {
   }
 }
 
-function showAddNoteMenu(e) {
-  // show a menu to create a new note
-  e.preventDefault();
+function noteInputMenu(callback, title="Note", text="", tags="", buttonText="Add Note") {
   let menu = document.createElement("div");
   menu.classList.add("add-notes-menu");
   let newNoteTitle = document.createElement("input");
@@ -133,14 +146,23 @@ function showAddNoteMenu(e) {
   let newNoteTags = document.createElement("input");
   let addNoteButton = document.createElement("button");
 
-  newNoteTitle.value = "Note";
+  newNoteTitle.value = title;
+  newNoteText.value = text;
+  newNoteTags.value = tags;
   newNoteText.placeholder = "text";
   newNoteTags.placeholder = "tags seperated by comma";
-  addNoteButton.innerText = "Add Note";
+  addNoteButton.innerText = buttonText;
   addNoteButton.addEventListener("click", (e) => {
     e.preventDefault();
     if (newNoteTitle.value.length > 0 && newNoteText.value.length > 0) {
-      addNote(newNoteText.value, newNoteTags.value.split(","), newNoteTitle.value);
+      const text = newNoteText.value;
+      const tags = newNoteTags.value.split(",");
+      const title = newNoteTitle.value;
+      try {
+        callback(title, text, tags);
+      } catch (error) {
+        console.error(error);
+      }   
       menu.parentNode.removeChild(menu);
     }
   });
@@ -151,6 +173,19 @@ function showAddNoteMenu(e) {
   menu.appendChild(addNoteButton);
 
   document.getElementById('main').appendChild(menu);
+}
+function showAddNoteMenu(e) {
+  e.preventDefault();
+  // show a menu to create a new note
+  noteInputMenu((title, text, tags)=>{
+    addNote(text, tags, title);
+  });
+}
+function showEditNoteMenu(id) {
+  const note = getNote(id);
+  noteInputMenu((title, text, tags) => {
+    updateNote(id, title, text, tags);
+  }, note.title, note.text, note.tags.join(","), "edit Note");
 }
 
 function exportNotes() {

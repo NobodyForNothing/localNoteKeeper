@@ -26,20 +26,31 @@
   padding: 15px;
   border-radius: 30px;
   margin: 20px;
+  overflow-wrap: break-word;
 }
 #notes-section .note > div {
   display: block;
 }
-#notes-section .note .remove-note {
+#notes-section .note button {
   float: right;
   border: none;
   font-size: large;
   font-weight:bolder;
   border-radius: 100%;
   background-color: #FFF;
+  margin: 3px;
+  right: 0;
 }
-#notes-section .note .remove-note:hover {
+#notes-section .note button:hover {
   background-color: #999;
+}
+
+#notes-section .note .remove-note {
+  bottom: 0;
+}
+
+#notes-section .note .edit-note {
+  top: 0;
 }
 
 #add-notes {
