@@ -1,11 +1,13 @@
 "use strict"
 
-let notes = [{
+const defaultNotes = [{
   "id": 0,
   "title": "Creating Notes:",
   "text": "You can create notes by pressing the + button",
   "tags": ["tutorial", "starter", "default"]
-}]
+}];
+
+let notes = defaultNotes;
 
 function loadNotes() {
   let json = window.localStorage.notes;
@@ -14,6 +16,13 @@ function loadNotes() {
   if (notesInStorage.length > 0) {
     notes = notesInStorage;
   }
+}
+
+function clearAllNotes() {
+  if (confirm("Do you really want to delete all notes?")) {
+    notes = defaultNotes;
+  }
+  drawNotes();
 }
 
 function createNote(text, tags, title = "Note") {
@@ -103,9 +112,10 @@ function removeNote(id) {
   }
 }
 
-function updateNote(id, text, tags) {
+function updateNote(id, title, text, tags) {
   for (let i = 0; i < notes.length; i++) {
     if (notes[i]["id"] === id) {
+      notes[i]["title"] = title;
       notes[i]["text"] = text;
       notes[i]["tags"] = tags;
       drawNotes();
@@ -177,15 +187,6 @@ function saveAs(blob, name) {
   saveAsLink.href = URL.createObjectURL(blob);
   saveAsLink.download = name;
   saveAsLink.click();
-}
-
-function exportNotesAsCSV() {
-  // export notes as a CSV file
-  let csv = notes.map(function(note) {
-    return note.title + "~" + note.text + "~" + note.tags.join(",");
-  }).join("\n");
-  let blob = new Blob([csv], { type: "text/csv" });
-  saveAs(blob, "notes.csv");
 }
 
 loadNotes();
