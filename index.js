@@ -8,29 +8,32 @@ const defaultNotes = [{
 }];
 
 let notes = defaultNotes;
+let data = {};
 
 const fakeEvent = {};
 fakeEvent.preventDefault = () => {};
 
 function loadNotes() {
-  let json = window.localStorage.notes;
-  let notesInStorage = JSON.parse(json);
-
-  if (notesInStorage.length > 0) {
-    notes = notesInStorage;
+  let json = window.localStorage.data;
+  data = JSON.parse(json);
+  if (!(data.title)) {
+    data.title = "Notes";
+  }
+  if (!(data.title.length > 0)) {
+    data.notes = defaultNotes;
   }
 }
 
 function clearAllNotes() {
   if (confirm("Do you really want to delete all notes?")) {
-    notes = defaultNotes;
+    data.notes = defaultNotes;
   }
   drawNotes();
 }
 
 function createNote(text, tags, title = "Note") {
   let lastNoteId = 0;
-  for(let note of notes) {
+  for(let note of data.notes) {
     if(note.id > lastNoteId) {
       lastNoteId = note.id;
     }
@@ -49,7 +52,7 @@ function drawNotes() {
   let sectionElement = document.getElementById("notes-section");
   sectionElement.innerHTML = "";
 
-  for (const note of notes) {
+  for (const note of data.notes) {
     // create note
     let noteElement = document.createElement("div");
     noteElement.classList.add("note");
@@ -99,28 +102,29 @@ function drawNotes() {
   addNotesNode.innerText = "+";
   addNotesNode.addEventListener("click", showAddNoteMenu);
   sectionElement.appendChild(addNotesNode);
+  document.getElementById('title').value = data.title;
 
   // save notes to local storage
-  window.localStorage.notes = JSON.stringify(notes, null, 2);;
+  window.localStorage.data = JSON.stringify(data, null, 2);;
 }
 
 function addNote(text, tags, title = "Note") {
-  notes.push(createNote(text, tags, title));
+  data.notes.push(createNote(text, tags, title));
   drawNotes();
 }
 
 function getNote(id) {
-  for (let i = 0; i < notes.length; i++) {
-    if (notes[i]["id"] === id) {
-      return notes[i];
+  for (let i = 0; i < data.notes.length; i++) {
+    if (data.notes[i]["id"] === id) {
+      return data.notes[i];
     }
   }
 }
 
 function removeNote(id) {
-  for (let i = 0; i < notes.length; i++) {
-    if (notes[i]["id"] === id) {
-      notes.splice(i, 1);
+  for (let i = 0; i < data.notes.length; i++) {
+    if (data.notes[i]["id"] === id) {
+      data.notes.splice(i, 1);
       drawNotes();
       return;
     }
@@ -128,11 +132,11 @@ function removeNote(id) {
 }
 
 function updateNote(id, title, text, tags) {
-  for (let i = 0; i < notes.length; i++) {
-    if (notes[i]["id"] === id) {
-      notes[i]["title"] = title;
-      notes[i]["text"] = text;
-      notes[i]["tags"] = tags;
+  for (let i = 0; i < data.notes.length; i++) {
+    if (data.notes[i]["id"] === id) {
+      data.notes[i]["title"] = title;
+      data.notes[i]["text"] = text;
+      data.notes[i]["tags"] = tags;
       drawNotes();
     }
   }
@@ -190,9 +194,9 @@ function showEditNoteMenu(id) {
 
 function exportNotes() {
   // export notes as a JSON file
-  let json = JSON.stringify(notes, null, 2);
+  let json = JSON.stringify(data, null, 2);
   let blob = new Blob([json], { type: "application/json" });
-  saveAs(blob, "notes.json");
+  saveAs(blob, `${data.title}.json`);
 }
 
 function importNotes() {
@@ -200,7 +204,26 @@ function importNotes() {
   var input = document.createElement('input');
   input.type = 'file';
   input.onchange = e => {
+    // getting a hold of the file reference
+    var file = e.target.files[0];
+    // setting up the reader
+    var reader = new FileReader();
+    reader.readAsText(file,'UTF-8');
+    reader.onload = (e) => {
+      let json = e.target.result;
+      data = JSON.parse(json);
+      drawNotes();
+    };
 
+  }
+  input.click();
+}
+
+function importOldNotes() {
+  // import notes from a JSON file
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.onchange = e => {
     // getting a hold of the file reference
     var file = e.target.files[0];
     // setting up the reader
@@ -209,10 +232,11 @@ function importNotes() {
     reader.onload = (e) => {
       let json = e.target.result;
       console.log(json);
-      notes = JSON.parse(json);
+      data = {}
+      data.notes = JSON.parse(json);
+      data.title = 'Notes';
       drawNotes();
     };
-
   }
   input.click();
 }
@@ -222,6 +246,11 @@ function saveAs(blob, name) {
   saveAsLink.href = URL.createObjectURL(blob);
   saveAsLink.download = name;
   saveAsLink.click();
+}
+
+function updateTitle() {
+  data.title = document.getElementById('title').value;
+  drawNotes();
 }
 
 loadNotes();

@@ -64,6 +64,17 @@
   transform: scale(1.03);
 }
 
+#title {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: xx-large;
+}
+#title:focus, #title textarea:focus {
+  outline: none;
+}
+
+
 .add-notes-menu {
   color: black;
   position: absolute;
