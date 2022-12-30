@@ -7,6 +7,15 @@ let notes = [{
   "tags": ["tutorial", "starter", "default"]
 }]
 
+function loadNotes() {
+  let json = window.localStorage.notes;
+  let notesInStorage = JSON.parse(json);
+
+  if (notesInStorage.length > 0) {
+    notes = notesInStorage;
+  }
+}
+
 function createNote(text, tags, title = "Note") {
   let lastNoteId = 0;
   for(let note of notes) {
@@ -64,7 +73,7 @@ function drawNotes() {
     innerNote.appendChild(textElement);
     innerNote.appendChild(tagsElement);
     innerNote.appendChild(removeNoteButton);
-    noteElement.appendChild(innerNote)
+    noteElement.appendChild(innerNote);
 
     sectionElement.appendChild(noteElement);
   }
@@ -74,6 +83,9 @@ function drawNotes() {
   addNotesNode.innerText = "+";
   addNotesNode.addEventListener("click", showAddNoteMenu);
   sectionElement.appendChild(addNotesNode);
+
+  // save notes to local storage
+  window.localStorage.notes = JSON.stringify(notes, null, 2);;
 }
 
 function addNote(text, tags, title = "Note") {
@@ -176,4 +188,5 @@ function exportNotesAsCSV() {
   saveAs(blob, "notes.csv");
 }
 
+loadNotes();
 drawNotes();
